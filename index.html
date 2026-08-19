@@ -2,15 +2,13 @@
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Portal de Projetos - testeence</title>
 
 <style>
-
 body{
     font-family: Arial, sans-serif;
-    max-width: 1200px;
+    max-width:1200px;
     margin:auto;
     padding:20px;
     background:#f5f5f5;
@@ -27,14 +25,12 @@ header{
 }
 
 #controles{
-    display:flex;
-    gap:10px;
     margin:20px 0;
-    flex-wrap:wrap;
 }
 
-input,select{
-    padding:10px;
+input, select{
+    padding:8px;
+    margin-right:10px;
 }
 
 .grid{
@@ -46,61 +42,42 @@ input,select{
 .card{
     background:white;
     padding:15px;
-    border-radius:10px;
-    box-shadow:0 2px 5px rgba(0,0,0,0.15);
-}
-
-.card:hover{
-    transform:translateY(-3px);
-}
-
-.card h3{
-    margin-top:0;
+    border-radius:8px;
+    box-shadow:0 0 5px rgba(0,0,0,0.2);
 }
 
 .avatar{
-    width:32px;
-    height:32px;
+    width:30px;
+    height:30px;
     border-radius:50%;
-    margin-right:4px;
+    margin-right:3px;
 }
-
-.badge{
-    display:inline-block;
-    padding:4px 8px;
-    background:#0969da;
-    color:white;
-    border-radius:5px;
-    font-size:12px;
-}
-
-a{
-    color:#0969da;
-    text-decoration:none;
-}
-
 </style>
-
 </head>
+
 <body>
 
 <header>
-    <div id="perfil"></div>
+
+<div id="perfil">
+    <p>Carregando perfil...</p>
+</div>
+
 </header>
 
 <div id="controles">
 
-    <input
-      type="text"
-      id="busca"
-      placeholder="Pesquisar projeto">
+<input
+type="text"
+id="busca"
+placeholder="Pesquisar projeto">
 
-    <select id="filtro">
-        <option value="Todos">Todos</option>
-        <option value="Workshop">Workshop</option>
-        <option value="Site">Site</option>
-        <option value="Outros">Outros</option>
-    </select>
+<select id="filtro">
+    <option value="Todos">Todos</option>
+    <option value="Workshop">Workshop</option>
+    <option value="Site">Site</option>
+    <option value="Outros">Outros</option>
+</select>
 
 </div>
 
@@ -109,163 +86,156 @@ a{
 <script>
 
 const usuario = "testeence";
-
 let todosRepos = [];
 
-function categoria(repo){
+function categoria(nome){
 
-    const nome = repo.name.toLowerCase();
+    nome = nome.toLowerCase();
 
-    if(nome.includes("workshop"))
+    if(nome.includes("workshop")){
         return "Workshop";
+    }
 
     if(
-       nome.includes("page") ||
-       nome.includes("github.io") ||
-       nome.includes("site"))
-       return "Site";
+        nome.includes("github.io") ||
+        nome.includes("page") ||
+        nome.includes("site")
+    ){
+        return "Site";
+    }
 
     return "Outros";
 }
 
 async function carregarPerfil(){
 
-    const resposta =
-      await fetch(`https://api.github.com/users/${usuario}`);
-
-    const user =
-      await resposta.json();
-
-    document.getElementById("perfil").innerHTML = `
-        <img srcvatar_url}
-        <h1>${user.name || user.login}</h1>
-        <p>${user.bio || ""}</p>
-        <p>
-            Repositórios públicos:
-            ${user.public_repos}
-        </p>
-    `;
+    document.getElementById("perfil").innerHTML =
+    '<img src="https://github.com/' + usuario + '. '</h1>' +
+    '<p>Projetos públicos no GitHub</p>';
 }
 
 async function carregarRepos(){
 
-    const resposta =
-      await fetch(
-      `https://api.github.com/users/${usuario}/repos?sort=updated`);
+    try{
 
-    todosRepos =
-      await resposta.json();
+        const resposta = await fetch(
+            'https://api.github.com/users/' +
+            usuario +
+            '/repos?sort=updated'
+        );
 
-    renderizar(todosRepos);
+        todosRepos = await resposta.json();
+
+        renderizarRepos();
+
+    }catch(erro){
+
+        document.getElementById("repositorios").innerHTML =
+        "<p>Erro ao carregar repositórios.</p>";
+
+        console.log(erro);
+    }
 }
 
-async function colaboradores(url){
+async function obterColaboradores(url){
 
     try{
 
-        const r = await fetch(url);
-        const dados = await r.json();
+        const resposta = await fetch(url);
 
-        return dados.slice(0,5)
-            .map(c =>
-               `<img class="avatar"
-                     src="${c.avatar_url}"
-                     title="${c.loginderizar(lista){
+        const colaboradores =
+        await resposta.json();
+
+        let html = "";
+
+        colaboradores.slice(0,5).forEach(function(c){
+
+            html +=
+            '<img class="avatar" src="' +
+            c.avatar_url +
+            '" title="' +
+            c.login +
+            '">';
+        });
+
+        return html;
+
+    }catch{
+
+        return "";
+    }
+}
+
+async function renderizarRepos(){
 
     const container =
-      document.getElementById("repositorios");
+    document.getElementById("repositorios");
 
     container.innerHTML = "";
 
-    for(const repo of lista){
+    const textoBusca =
+    document.getElementById("busca")
+    .value
+    .toLowerCase();
 
-        const cat = categoria(repo);
+    const filtro =
+    document.getElementById("filtro").value;
 
-        const colabs =
-           await colaboradores(
-           repo.contributors_url);
+    for(const repo of todosRepos){
 
-        container.innerHTML += `
+        const cat = categoria(repo.name);
 
-        <div class="card repo-card"
-             data-cat="${cat}">
+        if(
+            filtro !== "Todos" &&
+            filtro !== cat
+        ){
+            continue;
+        }
 
-            <h3>${repo.name}</h3>
+        if(
+            !repo.name.toLowerCase()
+            .includes(textoBusca)
+        ){
+            continue;
+        }
 
-            <span class="badge">
-                ${cat}
-            </span>
+        const colaboradores =
+        await obterColaboradores(
+            repo.contributors_url
+        );
 
-            <p>
-                ${repo.description || 'Sem descrição'}
-            </p>
+        const card =
+        document.createElement("div");
 
-            <p>
-                <strong>Linguagem:</strong>
-                ${repo.language || 'N/A'}
-            </p>
+        card.className = "card";
 
-            <p>
-                <strong>Colaboradores:</strong>
-                <br>
-                ${colabs}
-            </p>
+        card.innerHTML =
+        "<h3>" + repo.name + "</h3>" +
+        "<p><strong>Categoria:</strong> " + cat + "</p>" +
+        "<p>" +
+        (repo.description || "Sem descrição") +
+        "</p>" +
+        "<p><strong>Linguagem:</strong> " +
+        (repo.language || "Não informada") +
+        "</p>" +
+        "<p><strong>Colaboradores:</strong><br>" +
+        colaboradores +
+        "</p>" +
+        '<a href="' +
+        repo.html_url +
+        '" target="_blank">Abrir repositório</a>';
 
-            <p>
-                ${repo.html_url}
-                   Abrir Repositório
-                </a>
-            </p>
-
-        </div>`;
+        container.appendChild(card);
     }
-
-    aplicarFiltro();
-}
-
-function aplicarFiltro(){
-
-    const termo =
-       document.getElementById("busca")
-       .value
-       .toLowerCase();
-
-    const categoriaFiltro =
-       document.getElementById("filtro")
-       .value;
-
-    document
-       .querySelectorAll(".repo-card")
-       .forEach(card=>{
-
-          const texto =
-             card.textContent.toLowerCase();
-
-          const categoria =
-             card.dataset.cat;
-
-          const matchTexto =
-             texto.includes(termo);
-
-          const matchCategoria =
-             categoriaFiltro === "Todos"
-             ||
-             categoria === categoriaFiltro;
-
-          card.style.display =
-             (matchTexto && matchCategoria)
-             ? "block"
-             : "none";
-       });
 }
 
 document
 .getElementById("busca")
-.addEventListener("keyup", aplicarFiltro);
+.addEventListener("keyup", renderizarRepos);
 
 document
 .getElementById("filtro")
-.addEventListener("change", aplicarFiltro);
+.addEventListener("change", renderizarRepos);
 
 carregarPerfil();
 carregarRepos();
