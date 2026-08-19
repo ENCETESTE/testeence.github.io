@@ -8,77 +8,150 @@
 
 <style>
 
-body{
-    font-family: Arial, sans-serif;
+*{
     margin:0;
-    background:#f5f5f5;
+    padding:0;
+    box-sizing:border-box;
 }
 
-header{
+body{
+    font-family:Segoe UI, Arial, sans-serif;
+    background:#f6f8fa;
+    color:#24292f;
+    line-height:1.6;
+}
+
+.hero{
     background:#0d1117;
     color:white;
     text-align:center;
-    padding:40px 20px;
+    padding:60px 20px;
 }
 
-header img{
+.hero img{
     width:140px;
+    height:140px;
     border-radius:50%;
     border:4px solid white;
+    margin-bottom:20px;
 }
 
-.container{
-    max-width:1200px;
-    margin:auto;
-    padding:20px;
+.hero h1{
+    font-size:3rem;
 }
 
-.controls{
-    margin:20px 0;
-}
-
-input{
-    width:300px;
-    max-width:100%;
-    padding:10px;
-}
-
-.grid{
-    display:grid;
-    grid-template-columns:repeat(auto-fit,minmax(300px,1fr));
-    gap:20px;
-}
-
-.card{
-    background:white;
-    padding:15px;
-    border-radius:10px;
-    box-shadow:0 2px 5px rgba(0,0,0,.1);
-}
-
-.card h3{
-    margin-top:0;
+.hero p{
+    max-width:700px;
+    margin:15px auto;
 }
 
 .btn{
     display:inline-block;
-    padding:8px 12px;
-    background:#0969da;
+    padding:12px 20px;
+    margin:5px;
+    background:#1f6feb;
     color:white;
     text-decoration:none;
     border-radius:6px;
 }
 
-.avatar{
-    width:30px;
-    height:30px;
-    border-radius:50%;
-    margin-right:4px;
+.btn:hover{
+    background:#388bfd;
+}
+
+.container{
+    max-width:1200px;
+    margin:auto;
+    padding:30px;
+}
+
+.section{
+    background:white;
+    margin-bottom:25px;
+    padding:25px;
+    border-radius:10px;
+    box-shadow:0 2px 5px rgba(0,0,0,.08);
+}
+
+.section h2{
+    margin-bottom:15px;
+    color:#0d1117;
+}
+
+.stats{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
+    gap:15px;
+}
+
+.stat{
+    background:#f6f8fa;
+    text-align:center;
+    padding:20px;
+    border-radius:8px;
+}
+
+.stat h3{
+    font-size:2rem;
+    color:#0969da;
+}
+
+.featured{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+    gap:15px;
+}
+
+.feature-card{
+    background:#f6f8fa;
+    padding:20px;
+    border-radius:8px;
+}
+
+.feature-card h3{
+    margin-bottom:10px;
+}
+
+.search{
+    margin:15px 0;
+}
+
+.search input{
+    width:100%;
+    padding:12px;
+    border:1px solid #d0d7de;
+    border-radius:6px;
+}
+
+.repo-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(300px,1fr));
+    gap:20px;
+}
+
+.repo{
+    background:white;
+    border:1px solid #d8dee4;
+    border-radius:10px;
+    padding:20px;
+}
+
+.repo h3{
+    margin-bottom:10px;
+}
+
+.repo p{
+    margin-bottom:10px;
+}
+
+.repo a{
+    color:#0969da;
+    text-decoration:none;
 }
 
 .footer{
     text-align:center;
-    padding:20px;
+    padding:30px;
     color:#666;
 }
 
@@ -87,101 +160,171 @@ input{
 
 <body>
 
-<header>
+<header class="hero">
 
-<img src="httpsTESTE.png" alt="ENCETESTE">
+<img src="https://github.com.png
 
 <h1>ENCETESTE</h1>
 
 <p>
-Portal de Projetos, Workshops e Desenvolvimento
+Portal de Projetos, Workshops, Desenvolvimento Web,
+Coleta de Dados e Compartilhamento de Conhecimento.
 </p>
 
-<p>
 <a class="btn"
 href="https://github.com/ENCETESTE"
 target="_blank">
 GitHub
 </a>
-</p>
 
-</header>
+<a class="btn"
+href="https://enceteste.github.ioer>
 
 <div class="container">
 
-<div class="controls">
+<section class="section">
 
+<h2>Sobre</h2>
+
+<p>
+A ENCETESTE reúne iniciativas de desenvolvimento,
+workshops, experimentação tecnológica,
+automação de processos e compartilhamento
+de conhecimento.
+</p>
+
+</section>
+
+<section class="section">
+
+<h2>Indicadores</h2>
+
+<div class="stats">
+
+<div class="stat">
+<h3 id="reposTotal">-</h3>
+<p>Repositórios</p>
+</div>
+
+<div class="stat">
+<h3 id="seguidores">-</h3>
+<p>Seguidores</p>
+</div>
+
+<div class="stat">
+<h3 id="seguindo">-</h3>
+<p>Seguindo</p>
+</div>
+
+</div>
+
+</section>
+
+<section class="section">
+
+<h2>Projetos em Destaque</h2>
+
+<div class="featured">
+
+<div class="feature-card">
+<h3>landing-page</h3>
+<p>Página principal do portal.</p>
+</div>
+
+<div class="feature-card">
+<h3>webscrapping</h3>
+<p>Ferramentas para coleta de dados.</p>
+</div>
+
+<div class="feature-card">
+<h3>2ndWorkshop</h3>
+<p>Material de workshop e capacitação.</p>
+</div>
+
+<div class="feature-card">
+<h3>5aOficina</h3>
+<p>Conteúdo educacional e treinamento.</p>
+</div>
+
+</div>
+
+</section>
+
+<section class="section">
+
+<h2>Repositórios</h2>
+
+<div class="search">
 <input
 type="text"
 id="busca"
-placeholder="Pesquisar projeto...">
-
+placeholder="Pesquisar repositórios...">
 </div>
 
-<div id="repositorios" class="grid">
-
-<p>Carregando repositórios...</p>
-
+<div id="repositorios" class="repo-grid">
+<p>Carregando...</p>
 </div>
+
+</section>
 
 </div>
 
 <div class="footer">
-
 ENCETESTE • GitHub Pages
-
 </div>
 
 <script>
 
 const usuario = "ENCETESTE";
-let repos = [];
+let repositorios = [];
+
+async function carregarPerfil(){
+
+    const resposta =
+    await fetch(
+    "https://api.github.com/users/" + usuario
+    );
+
+    const user =
+    await resposta.json();
+
+    document.getElementById("reposTotal").innerText =
+    user.public_repos;
+
+    document.getElementById("seguidores").innerText =
+    user.followers;
+
+    document.getElementById("seguindo").innerText =
+    user.following;
+}
 
 async function carregarRepos(){
 
-    try{
+    const resposta =
+    await fetch(
+    "https://api.github.com/users/" +
+    usuario +
+    "/repos?sort=updated"
+    );
 
-        const resposta =
-        await fetch(
-        "https://api.github.com/users/" +
-        usuario +
-        "/repos?sort=updated"
-        );
-
-        repos = await resposta.json();
-
-        mostrarRepos();
-
-    }catch(erro){
-
-        document.getElementById("repositorios").innerHTML =
-        "<p>Erro ao carregar repositórios.</p>";
-
-        console.log(erro);
-    }
-
-}
-
-function filtrar(){
+    repositorios =
+    await resposta.json();
 
     mostrarRepos();
-
 }
 
 function mostrarRepos(){
 
     const busca =
-    document
-    .getElementById("busca")
-    .value
-    .toLowerCase();
+    document.getElementById("busca")
+    .value.toLowerCase();
 
     const container =
     document.getElementById("repositorios");
 
     container.innerHTML = "";
 
-    repos.forEach(function(repo){
+    repositorios.forEach(repo => {
 
         if(
             !repo.name.toLowerCase()
@@ -190,28 +333,24 @@ function mostrarRepos(){
             return;
         }
 
-        const descricao =
-        repo.description ||
-        "Sem descrição disponível";
-
-        const linguagem =
-        repo.language ||
-        "Não informada";
-
         const card =
         document.createElement("div");
 
-        card.className = "card";
+        card.className = "repo";
 
         card.innerHTML =
         "<h3>" + repo.name + "</h3>" +
-        "<p>" + descricao + "</p>" +
-        "<p><strong>Linguagem:</strong> " +
-        linguagem +
+        "<p>" +
+        (repo.description ||
+        "Sem descrição disponível") +
         "</p>" +
-        "<a class='btn' href='" +
+        "<p><strong>Linguagem:</strong> " +
+        (repo.language ||
+        "Não informada") +
+        "</p>" +
+        "<a href='" +
         repo.html_url +
-        "' target='_blank'>Abrir Repositório</a>";
+        "' target='_blank'>Abrir repositório</a>";
 
         container.appendChild(card);
 
@@ -223,9 +362,10 @@ document
 .getElementById("busca")
 .addEventListener(
 "keyup",
-filtrar
+mostrarRepos
 );
 
+carregarPerfil();
 carregarRepos();
 
 </script>
