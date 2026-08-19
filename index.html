@@ -2,35 +2,45 @@
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Portal de Projetos - testeence</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<title>ENCETESTE</title>
 
 <style>
+
 body{
     font-family: Arial, sans-serif;
-    max-width:1200px;
-    margin:auto;
-    padding:20px;
+    margin:0;
     background:#f5f5f5;
 }
 
 header{
+    background:#0d1117;
+    color:white;
     text-align:center;
-    margin-bottom:30px;
+    padding:40px 20px;
 }
 
-#perfil img{
-    width:120px;
+header img{
+    width:140px;
     border-radius:50%;
+    border:4px solid white;
 }
 
-#controles{
+.container{
+    max-width:1200px;
+    margin:auto;
+    padding:20px;
+}
+
+.controls{
     margin:20px 0;
 }
 
-input, select{
-    padding:8px;
-    margin-right:10px;
+input{
+    width:300px;
+    max-width:100%;
+    padding:10px;
 }
 
 .grid{
@@ -42,16 +52,36 @@ input, select{
 .card{
     background:white;
     padding:15px;
-    border-radius:8px;
-    box-shadow:0 0 5px rgba(0,0,0,0.2);
+    border-radius:10px;
+    box-shadow:0 2px 5px rgba(0,0,0,.1);
+}
+
+.card h3{
+    margin-top:0;
+}
+
+.btn{
+    display:inline-block;
+    padding:8px 12px;
+    background:#0969da;
+    color:white;
+    text-decoration:none;
+    border-radius:6px;
 }
 
 .avatar{
     width:30px;
     height:30px;
     border-radius:50%;
-    margin-right:3px;
+    margin-right:4px;
 }
+
+.footer{
+    text-align:center;
+    padding:20px;
+    color:#666;
+}
+
 </style>
 </head>
 
@@ -59,74 +89,68 @@ input, select{
 
 <header>
 
-<div id="perfil">
-    <p>Carregando perfil...</p>
-</div>
+<img src="httpsTESTE.png" alt="ENCETESTE">
+
+<h1>ENCETESTE</h1>
+
+<p>
+Portal de Projetos, Workshops e Desenvolvimento
+</p>
+
+<p>
+<a class="btn"
+href="https://github.com/ENCETESTE"
+target="_blank">
+GitHub
+</a>
+</p>
 
 </header>
 
-<div id="controles">
+<div class="container">
+
+<div class="controls">
 
 <input
 type="text"
 id="busca"
-placeholder="Pesquisar projeto">
-
-<select id="filtro">
-    <option value="Todos">Todos</option>
-    <option value="Workshop">Workshop</option>
-    <option value="Site">Site</option>
-    <option value="Outros">Outros</option>
-</select>
+placeholder="Pesquisar projeto...">
 
 </div>
 
-<div id="repositorios" class="grid"></div>
+<div id="repositorios" class="grid">
+
+<p>Carregando repositórios...</p>
+
+</div>
+
+</div>
+
+<div class="footer">
+
+ENCETESTE • GitHub Pages
+
+</div>
 
 <script>
 
-const usuario = "testeence";
-let todosRepos = [];
-
-function categoria(nome){
-
-    nome = nome.toLowerCase();
-
-    if(nome.includes("workshop")){
-        return "Workshop";
-    }
-
-    if(
-        nome.includes("github.io") ||
-        nome.includes("page") ||
-        nome.includes("site")
-    ){
-        return "Site";
-    }
-
-    return "Outros";
-}
-
-async function carregarPerfil(){
-
-    document.getElementById("perfil").innerHTML =
-    '<img src="https://github.com/' + usuario + '. '
-    '<p>Projetos públicos no GitHub</p>';
-}
+const usuario = "ENCETESTE";
+let repos = [];
 
 async function carregarRepos(){
 
     try{
 
-        const resposta = await fetch(
-            'https://api.github.com/users/' +
-            usuario +
-            '/repos?sort=updated'
+        const resposta =
+        await fetch(
+        "https://api.github.com/users/" +
+        usuario +
+        "/repos?sort=updated"
         );
 
-        todosRepos = await resposta.json();
+        repos = await resposta.json();
 
-        renderizarRepos();
+        mostrarRepos();
 
     }catch(erro){
 
@@ -135,74 +159,44 @@ async function carregarRepos(){
 
         console.log(erro);
     }
+
 }
 
-async function obterColaboradores(url){
+function filtrar(){
 
-    try{
+    mostrarRepos();
 
-        const resposta = await fetch(url);
-
-        const colaboradores =
-        await resposta.json();
-
-        let html = "";
-
-        colaboradores.slice(0,5).forEach(function(c){
-
-            html +=
-            '<img class="avatar" src="' +
-            c.avatar_url +
-            '" title="' +
-            c.login +
-            '">';
-        });
-
-        return html;
-
-    }catch{
-
-        return "";
-    }
 }
 
-async function renderizarRepos(){
+function mostrarRepos(){
+
+    const busca =
+    document
+    .getElementById("busca")
+    .value
+    .toLowerCase();
 
     const container =
     document.getElementById("repositorios");
 
     container.innerHTML = "";
 
-    const textoBusca =
-    document.getElementById("busca")
-    .value
-    .toLowerCase();
-
-    const filtro =
-    document.getElementById("filtro").value;
-
-    for(const repo of todosRepos){
-
-        const cat = categoria(repo.name);
-
-        if(
-            filtro !== "Todos" &&
-            filtro !== cat
-        ){
-            continue;
-        }
+    repos.forEach(function(repo){
 
         if(
             !repo.name.toLowerCase()
-            .includes(textoBusca)
+            .includes(busca)
         ){
-            continue;
+            return;
         }
 
-        const colaboradores =
-        await obterColaboradores(
-            repo.contributors_url
-        );
+        const descricao =
+        repo.description ||
+        "Sem descrição disponível";
+
+        const linguagem =
+        repo.language ||
+        "Não informada";
 
         const card =
         document.createElement("div");
@@ -211,33 +205,27 @@ async function renderizarRepos(){
 
         card.innerHTML =
         "<h3>" + repo.name + "</h3>" +
-        "<p><strong>Categoria:</strong> " + cat + "</p>" +
-        "<p>" +
-        (repo.description || "Sem descrição") +
-        "</p>" +
+        "<p>" + descricao + "</p>" +
         "<p><strong>Linguagem:</strong> " +
-        (repo.language || "Não informada") +
+        linguagem +
         "</p>" +
-        "<p><strong>Colaboradores:</strong><br>" +
-        colaboradores +
-        "</p>" +
-        '<a href="' +
+        "<a class='btn' href='" +
         repo.html_url +
-        '" target="_blank">Abrir repositório</a>';
+        "' target='_blank'>Abrir Repositório</a>";
 
         container.appendChild(card);
-    }
+
+    });
+
 }
 
 document
 .getElementById("busca")
-.addEventListener("keyup", renderizarRepos);
+.addEventListener(
+"keyup",
+filtrar
+);
 
-document
-.getElementById("filtro")
-.addEventListener("change", renderizarRepos);
-
-carregarPerfil();
 carregarRepos();
 
 </script>
